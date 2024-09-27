@@ -1,51 +1,42 @@
 # buildingon-avalnace
 
 
-# ERC20 Token Smart Contract
 
-This project contains a Solidity smart contract implementing the ERC20 standard for fungible tokens, built using OpenZeppelin's contract library.
+Create a custom token and deploy it to Avalanche Fuji Testnet
+This project is part of ETH+AVAX Proof Intermediate course by Metacrafters
 
-## Overview
+In this project we had to build a custom token using Solidity and deploy it to Avalanche Fuji Testnet using Hardhat.
 
-This ERC20 token contract allows users to:
-- Transfer tokens to other addresses.
-- Approve third-party addresses to spend tokens on their behalf.
-- Mint and burn tokens, altering the total supply.
-- Check token balances, allowances, and total supply.
+Pre-requisites
+Make sure you have a Web3 wallet such as Metamask.
+Visit a Avalanche Fuji Testnet faucet to recieve tokens in your wallet, which will be used to pay the transaction fee
+Setup
+1. Install all the required packages
+npm i
+2. Create a .env file and store your credentials inside
+WALLET_PRIVATE_KEY="YOUR PRIVATE KEY"
+SNOWTRACE_API_KEY="YOUR API KEY"
+3. Make changes in the hardhat.config.js file
+FORK_FUJI = true // if you wish to fork the testnet, else false
+FORK_MAINNET = true // if you wish to fork the mainnet, else false
+4. Deploy the token
+// Replace "SELECTED_NETWORK" with either fuji or mainnet
 
-### Key Features
-- **Compliant with ERC20 Standard**: Ensures compatibility with existing wallets and decentralized applications (DApps) that support ERC20 tokens.
-- **OpenZeppelin Libraries**: Leverages well-tested, secure implementations from OpenZeppelin, minimizing risk and saving development time.
-- **Custom Minting and Burning Logic**: Can be customized to support additional features like token airdrops, deflationary models, or governance.
+npx hardhat run --network "SELECTED_NETWORK" scripts/deploy.js
+Verification
+After the script executes successfully, the contract will be deployed on the selected net, and the address of the token would be printed.
 
-## Functions
+You can verify the Token creation on Snowtrace by pasting its address.
 
-- `name()`: Returns the name of the token.
-- `symbol()`: Returns the symbol of the token.
-- `decimals()`: Returns the number of decimals (18 by default).
-- `totalSupply()`: Returns the total number of tokens in circulation.
-- `balanceOf(address account)`: Returns the token balance of a specified address.
-- `transfer(address to, uint256 value)`: Transfers tokens to another address.
-- `allowance(address owner, address spender)`: Returns the remaining amount of tokens that a spender is allowed to transfer on behalf of the owner.
-- `approve(address spender, uint256 value)`: Allows a spender to transfer a specified amount of tokens on behalf of the owner.
-- `transferFrom(address from, address to, uint256 value)`: Transfers tokens from one address to another, using the approved allowance.
-- `_mint(address account, uint256 value)`: Mints new tokens, increasing the total supply.
-- `_burn(address account, uint256 value)`: Burns tokens, decreasing the total supply.
+To interact with the token, we'll be using Remix IDE
 
-## Usage
+Interaction
+Open Remix IDE on a browser
+Upload the same contract and press Ctrl+S to save and compile it
+In the deploy tab, set the environment to Injected Provider
+Approve the connection to your Web3 wallet, and the IDE will be connected to the net, and account will be loaded automatically.
+Paste your token address and click At Address. This will load up the contract, and you will be able to interact with it.
 
-1. **Install Dependencies**:
-   Make sure you have the OpenZeppelin library installed in your project:
-
-2. **Deploying the Contract**:
-Use tools like Remix, Hardhat, or Truffle to deploy the contract on an Ethereum-compatible blockchain.
-
-3. **Interacting with the Contract**:
-After deployment, you can interact with the contract using wallets like MetaMask or through DApps that support ERC20 tokens.
-
-## License
-
-This project is licensed under the MIT License.
 
 ## Contact
 
