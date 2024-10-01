@@ -6,35 +6,37 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract DegenToken is ERC20, Ownable {
 
-    constructor() ERC20("Degen", "DGN") {}
+    // Constructor initializing token name, symbol, and the owner
+    constructor(address initialOwner) ERC20("Degen", "DGN") Ownable(initialOwner) {
+        // No need to call transferOwnership here, it's already set in Ownable
+    }
 
-    event RedeemToken(address account, uint rewardCategory);
-    event BurnToken(address account, uint amount);
-    event TransferToken(address from, address to, uint amount);
+    // Events to log token activities
+    event TokensRedeemed(address indexed account, uint rewardTier);
+    event TokensBurned(address indexed account, uint amountBurned);
+    event TokensTransferred(address indexed from, address indexed to, uint amountTransferred);
 
-    // onlyOwner modifier allows only the user to execute the function
-    function mint(address to, uint256 amount) public onlyOwner {
-            _mint(to, amount);
+    // Mint new tokens to the specified address, only callable by the contract owner
+    function mint(address recipient, uint256 amountToMint) public onlyOwner {
+        _mint(recipient, amountToMint);
     }
     
-    // In-built transfer function is used
-    // transfer(to, amount);
-
-    //Wrapper function for balanceOf function of ERC20
-    function getBalance() public view returns (uint){
+    // Returns the balance of the caller (msg.sender)
+    function getBalance() public view returns (uint256) {
         return balanceOf(msg.sender);
     }
 
-    function redeem(uint rewardCategory) public {
-        uint requiredAmount = rewardCategory * 10;
-        require(balanceOf(msg.sender)>=requiredAmount,"Insufficient Amount");
+    // Redeem tokens based on the reward tier, requires sufficient balance
+    function redeem(uint rewardTier) public {
+        uint256 requiredAmount = rewardTier * 10;
+        require(balanceOf(msg.sender) >= requiredAmount, "Insufficient balance to redeem tokens");
         burn(requiredAmount);
-        emit RedeemToken(msg.sender, rewardCategory);
+        emit TokensRedeemed(msg.sender, rewardTier);
     }
 
-    // Wrapper function to access the private _burn function of ERC20
-    function burn(uint amount) public {
-        _burn(msg.sender, amount);
-        emit BurnToken(msg.sender, amount);
+    // Burn a specified amount of tokens from the caller's balance
+    function burn(uint256 amountToBurn) public {
+        _burn(msg.sender, amountToBurn);
+        emit TokensBurned(msg.sender, amountToBurn);
     }
 }
