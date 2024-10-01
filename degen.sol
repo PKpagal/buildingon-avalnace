@@ -16,11 +16,19 @@ contract DegenToken is ERC20, Ownable {
     event TokensBurned(address indexed account, uint amountBurned);
     event TokensTransferred(address indexed from, address indexed to, uint amountTransferred);
 
+    // String representing available items and their cost
+    string public items = "1. DEGEN NFT: 1000 DGN  2. DEGEN T-shirt: 50 DGN  3. DEGEN Treasure Chest: 100 DGN";
+
+    // Mappings to track redeemed items
+    mapping(address => uint) public nftBalance;
+    mapping(address => uint) public tshirtBalance;
+    mapping(address => uint) public chestBalance;
+
     // Mint new tokens to the specified address, only callable by the contract owner
     function mint(address recipient, uint256 amountToMint) public onlyOwner {
         _mint(recipient, amountToMint);
     }
-    
+
     // Returns the balance of the caller (msg.sender)
     function getBalance() public view returns (uint256) {
         return balanceOf(msg.sender);
@@ -38,5 +46,26 @@ contract DegenToken is ERC20, Ownable {
     function burn(uint256 amountToBurn) public {
         _burn(msg.sender, amountToBurn);
         emit TokensBurned(msg.sender, amountToBurn);
+    }
+
+    // Redeem items (NFT, T-shirt, Treasure Chest) by burning tokens
+    function RedeemToken(uint choice) public {
+        require(choice >= 1 && choice <= 3, "Invalid choice. Choose an item from the list");
+
+        if (choice == 1) {
+            require(balanceOf(msg.sender) >= 10, "Insufficient balance to redeem NFT");
+            _burn(msg.sender, 10);
+            nftBalance[msg.sender] += 1;  
+        }
+        else if (choice == 2) {
+            require(balanceOf(msg.sender) >= 50, "Insufficient balance to redeem T-shirt");
+            _burn(msg.sender, 50);
+            tshirtBalance[msg.sender] += 1;  
+        }
+        else if (choice == 3) {
+            require(balanceOf(msg.sender) >= 100, "Insufficient balance to redeem Treasure Chest");
+            _burn(msg.sender, 100);
+            chestBalance[msg.sender] += 1;  
+        }
     }
 }
